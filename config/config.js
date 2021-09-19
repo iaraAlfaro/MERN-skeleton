@@ -7,5 +7,6 @@ const config = {
         'mongodb://' + (process.env.IP || 'localhost') + ':' +
         (process.env.MONGO_PORT || '27017') +
         '/mernproject'
+    //mongodb+srv://admin:admin@cluster0.apawq.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
 }
 export default config 
