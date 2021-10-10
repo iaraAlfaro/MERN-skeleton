@@ -1,20 +1,17 @@
 import config from './../config/config'
-import webpack from 'webpack'
-import webpackMiddleware from 'webpack-dev-middleware'
-import webpackHotMiddleware from 'webpack-hot-middleware'
-import webpackConfig from './../webpack.config.client.js'
+import app from './express'
+import mongoose from 'mongoose'
 
-const compile = (app) => {
-  if (config.env === "development") {
-    const compiler = webpack(webpackConfig)
-    const middleware = webpackMiddleware(compiler, {
-      publicPath: webpackConfig.output.publicPath
-    })
-    app.use(middleware)
-    app.use(webpackHotMiddleware(compiler))
+// Connection URL
+mongoose.Promise = global.Promise
+mongoose.connect(config.mongoUri, { useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true })
+mongoose.connection.on('error', () => {
+  throw new Error(`unable to connect to database: ${config.mongoUri}`)
+})
+
+app.listen(config.port, (err) => {
+  if (err) {
+    console.log(err)
   }
-}
-
-export default {
-  compile
-}
+  console.info('Server started on port %s.', config.port)
+})
